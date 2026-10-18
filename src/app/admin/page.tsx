@@ -898,8 +898,24 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* Mobile Drawer Backdrop */}
+      {mobileMenuOpen && (
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.70)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+            zIndex: 990,
+          }}
+        />
+      )}
+
       {/* ==================== LEFT SIDEBAR ==================== */}
       <aside
+        className={`admin-sidebar ${mobileMenuOpen ? "open" : ""}`}
         style={{
           width: "270px",
           background: "rgba(10, 14, 24, 0.96)",
@@ -912,23 +928,41 @@ export default function AdminPage() {
           position: "sticky",
           top: 0,
           height: "100vh",
-          zIndex: 100,
+          zIndex: 1000,
           overflowY: "auto",
         }}
       >
         <div>
           {/* Brand Header */}
           <div style={{ padding: "24px 20px 20px", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-              <MarketBrandLogo size={42} />
-              <div>
-                <div style={{ fontWeight: 800, fontSize: "1.02rem", color: "#ffffff", letterSpacing: "-0.01em" }}>
-                  {settings.websiteName}
-                </div>
-                <div style={{ fontSize: "0.74rem", color: "var(--text-muted)", fontWeight: 500 }}>
-                  Trading Desk Control Panel
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <MarketBrandLogo size={42} />
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: "1.02rem", color: "#ffffff", letterSpacing: "-0.01em" }}>
+                    {settings.websiteName}
+                  </div>
+                  <div style={{ fontSize: "0.74rem", color: "var(--text-muted)", fontWeight: 500 }}>
+                    Trading Desk Control Panel
+                  </div>
                 </div>
               </div>
+
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="admin-mobile-toggle"
+                style={{
+                  background: "rgba(255, 255, 255, 0.06)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  borderRadius: "8px",
+                  padding: "6px",
+                  color: "#94a3b8",
+                  cursor: "pointer",
+                }}
+                aria-label="Close menu"
+              >
+                <X size={18} />
+              </button>
             </div>
 
             {/* DB Status Badge */}
@@ -1112,7 +1146,7 @@ export default function AdminPage() {
         {/* Top Navbar Header */}
         <header
           style={{
-            padding: "16px 32px",
+            padding: "14px 24px",
             background: "rgba(10, 14, 24, 0.88)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
@@ -1126,23 +1160,43 @@ export default function AdminPage() {
             color: "#ffffff",
           }}
         >
-          <div>
-            <h1 style={{ fontSize: "1.25rem", fontWeight: 800, margin: 0, textTransform: "capitalize", color: "#ffffff" }}>
-              {activeTab === "dashboard" && "Desk Overview"}
-              {activeTab === "home" && "Home Page Management"}
-              {activeTab === "about" && "About Page Management"}
-              {activeTab === "services" && "Services & Curriculum (CMS)"}
-              {activeTab === "portfolio" && "Portfolio & Case Studies (CMS)"}
-              {activeTab === "contact" && "Contact Page & Leads CRM"}
-              {activeTab === "subscribers" && "Newsletter Audience"}
-              {activeTab === "settings" && "Global Settings & SEO"}
-            </h1>
-            <div style={{ fontSize: "0.78rem", color: "var(--text-muted)", marginTop: "2px" }}>
-              Kamal Verma Global Trading Platform • MongoDB Persistence Engine
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="admin-mobile-toggle"
+              style={{
+                background: "rgba(255, 255, 255, 0.06)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                borderRadius: "10px",
+                padding: "8px",
+                color: "#ffffff",
+                cursor: "pointer",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              aria-label="Toggle navigation drawer"
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+
+            <div>
+              <h1 style={{ fontSize: "1.15rem", fontWeight: 800, margin: 0, textTransform: "capitalize", color: "#ffffff" }}>
+                {activeTab === "dashboard" && "Desk Overview"}
+                {activeTab === "home" && "Home Page (CMS)"}
+                {activeTab === "about" && "About Page (CMS)"}
+                {activeTab === "services" && "Services (CMS)"}
+                {activeTab === "portfolio" && "Portfolio (CMS)"}
+                {activeTab === "contact" && "Leads & CRM"}
+                {activeTab === "subscribers" && "Subscribers"}
+                {activeTab === "settings" && "Global Settings"}
+              </h1>
+              <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: "2px" }}>
+                Kamal Verma Trading Platform
+              </div>
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <button
               onClick={fetchAdminData}
               disabled={loading}
@@ -1150,40 +1204,87 @@ export default function AdminPage() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
-                fontSize: "0.78rem",
-                padding: "8px 14px",
+                gap: "5px",
+                fontSize: "0.76rem",
+                padding: "7px 12px",
                 background: "rgba(255, 255, 255, 0.06)",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
                 color: "#f8fafc",
+                borderRadius: "10px",
               }}
             >
               <RefreshCw size={13} className={loading ? "spin" : ""} />
-              <span>{loading ? "Syncing..." : "Sync DB"}</span>
+              <span className="desktop-only-text">{loading ? "Syncing..." : "Sync DB"}</span>
             </button>
 
-            <a
-              href={`tel:${settings.phone}`}
+            <Link
+              href="/"
+              target="_blank"
+              className="btn-ghost"
               style={{
-                fontSize: "0.78rem",
-                fontWeight: 700,
-                color: "var(--brand-primary)",
-                background: "var(--brand-primary-light)",
-                padding: "8px 14px",
-                borderRadius: "var(--radius-full)",
-                textDecoration: "none",
                 display: "flex",
                 alignItems: "center",
-                gap: "6px",
+                gap: "5px",
+                fontSize: "0.76rem",
+                padding: "7px 12px",
+                background: "rgba(37, 99, 235, 0.15)",
+                border: "1px solid rgba(59, 130, 246, 0.3)",
+                color: "#60a5fa",
+                borderRadius: "10px",
+                textDecoration: "none",
               }}
+              title="Preview Live Site"
             >
-              <Phone size={13} /> +91 {settings.phone}
-            </a>
+              <Globe size={13} />
+              <span className="desktop-only-text">Live Site</span>
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              className="btn-ghost admin-mobile-logout"
+              style={{
+                padding: "7px 10px",
+                background: "rgba(244, 63, 94, 0.12)",
+                border: "1px solid rgba(244, 63, 94, 0.25)",
+                color: "#fb7185",
+                borderRadius: "10px",
+                cursor: "pointer",
+              }}
+              title="Logout"
+            >
+              <LogOut size={14} />
+            </button>
           </div>
         </header>
 
+        {/* Horizontal Mobile Swipeable Tabs Bar */}
+        <div className="admin-mobile-tabs-container">
+          <div className="admin-mobile-tabs-track">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id as any)}
+                  className={`admin-mobile-tab-btn ${isActive ? "active" : ""}`}
+                >
+                  <span style={{ color: isActive ? "#60a5fa" : "var(--text-muted)", display: "flex", alignItems: "center" }}>
+                    {item.icon}
+                  </span>
+                  <span>{item.label.replace(" (CMS)", "").replace(" & Leads", "")}</span>
+                  {item.badge !== null && item.badge > 0 && (
+                    <span className="admin-mobile-tab-badge">
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Tab Body Content */}
-        <div style={{ padding: "32px", flex: 1 }}>
+        <div className="admin-tab-content-pad" style={{ padding: "32px", flex: 1 }}>
           {/* ========== TAB 1: DASHBOARD OVERVIEW ========== */}
           {activeTab === "dashboard" && (
             <div>
@@ -2334,7 +2435,136 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div style={{ overflowX: "auto" }}>
+                {/* Mobile Leads Card View (< 768px) */}
+                <div className="admin-mobile-leads-list" style={{ display: "none", flexDirection: "column", gap: "12px", marginTop: "14px" }}>
+                  {filteredInquiries.length === 0 ? (
+                    <div style={{ padding: "24px", textAlign: "center", color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                      No inquiries match the current filter.
+                    </div>
+                  ) : (
+                    filteredInquiries.map((inq) => (
+                      <div
+                        key={inq.id}
+                        style={{
+                          background: "rgba(10, 14, 24, 0.75)",
+                          border: "1px solid rgba(255, 255, 255, 0.08)",
+                          borderRadius: "16px",
+                          padding: "16px",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                        }}
+                      >
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                          <div>
+                            <div style={{ fontWeight: 800, fontSize: "0.98rem", color: "#ffffff" }}>{inq.name}</div>
+                            <div style={{ fontSize: "0.74rem", color: "var(--text-muted)", marginTop: "2px" }}>
+                              {inq.phone} • {new Date(inq.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
+
+                          <select
+                            value={inq.status}
+                            onChange={(e) => handleStatusChange(inq.id!, e.target.value as any)}
+                            style={{
+                              padding: "4px 8px",
+                              borderRadius: "8px",
+                              fontSize: "0.74rem",
+                              fontWeight: 700,
+                              border: "none",
+                              background:
+                                inq.status === "pending"
+                                  ? "rgba(245, 158, 11, 0.20)"
+                                  : inq.status === "contacted"
+                                  ? "rgba(59, 91, 219, 0.20)"
+                                  : "rgba(16, 185, 129, 0.20)",
+                              color:
+                                inq.status === "pending"
+                                  ? "#fbbf24"
+                                  : inq.status === "contacted"
+                                  ? "#60a5fa"
+                                  : "#34d399",
+                            }}
+                          >
+                            <option value="pending">Pending</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="enrolled">Enrolled</option>
+                          </select>
+                        </div>
+
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                          <span className="badge badge-blue" style={{ fontSize: "0.72rem" }}>{inq.serviceInterest}</span>
+                          <span className="badge" style={{ fontSize: "0.72rem", background: "rgba(255,255,255,0.06)", color: "#cbd5e1" }}>Exp: {inq.experienceLevel}</span>
+                          <span className="badge" style={{ fontSize: "0.72rem", background: "rgba(255,255,255,0.06)", color: "#cbd5e1" }}>Cap: {inq.tradingCapital}</span>
+                        </div>
+
+                        {inq.message && (
+                          <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", background: "rgba(255,255,255,0.03)", padding: "8px 10px", borderRadius: "8px" }}>
+                            "{inq.message.slice(0, 100)}{inq.message.length > 100 ? "..." : ""}"
+                          </div>
+                        )}
+
+                        <div style={{ display: "flex", gap: "8px", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                          <a
+                            href={`tel:${inq.phone}`}
+                            className="btn-ghost"
+                            style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", padding: "8px", fontSize: "0.78rem", textDecoration: "none" }}
+                          >
+                            <Phone size={13} color="var(--brand-primary)" /> Call
+                          </a>
+
+                          <a
+                            href={`https://wa.me/91${inq.phone}?text=Hello%20${encodeURIComponent(inq.name)},%20this%20is%20Kamal%20Verma%20regarding%20your%20trading%20mentorship%20inquiry.`}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              flex: 1,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              gap: "5px",
+                              background: "#25D366",
+                              color: "#fff",
+                              padding: "8px",
+                              borderRadius: "10px",
+                              fontSize: "0.78rem",
+                              fontWeight: 700,
+                              textDecoration: "none",
+                            }}
+                          >
+                            WhatsApp
+                          </a>
+
+                          <button
+                            onClick={() => setSelectedInquiry(inq)}
+                            className="btn-ghost"
+                            style={{ padding: "8px 10px" }}
+                            title="View Full Lead Details"
+                          >
+                            <Eye size={14} />
+                          </button>
+
+                          <button
+                            onClick={() => handleDeleteInquiry(inq.id!)}
+                            style={{
+                              background: "transparent",
+                              border: "none",
+                              color: "#fb7185",
+                              cursor: "pointer",
+                              padding: "8px",
+                            }}
+                            title="Delete Lead"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                {/* Desktop Table View (>= 768px) */}
+                <div className="admin-desktop-table-view" style={{ overflowX: "auto" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.84rem" }}>
                     <thead>
                       <tr style={{ borderBottom: "1px solid var(--border-card)", textAlign: "left", color: "var(--text-muted)" }}>

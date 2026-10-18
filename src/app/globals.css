@@ -354,11 +354,52 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.4rem); letter-spacing: -0.015em; }
   line-height: 1.6;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE & MOBILE ERGONOMICS ===== */
 @media (max-width: 768px) {
-  .section { padding: 60px 0; }
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  .modal-box { padding: 24px; }
+  .container {
+    padding: 0 16px;
+  }
+  .section {
+    padding: 48px 0;
+  }
+  .section-sm {
+    padding: 36px 0;
+  }
+  .grid-2, .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  h1 {
+    font-size: clamp(1.85rem, 6.2vw, 2.5rem);
+    letter-spacing: -0.025em;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 4.8vw, 2rem);
+  }
+  h3 {
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+  }
+  /* Prevent iOS Safari auto-zoom on input focus */
+  .form-input, .form-select, .form-textarea, input, select, textarea {
+    font-size: 16px !important;
+  }
+  /* Mobile Bottom Sheet Modal */
+  .modal-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+  .modal-box {
+    border-radius: 24px 24px 0 0 !important;
+    max-width: 100% !important;
+    max-height: 86vh !important;
+    padding: 24px 18px 32px !important;
+    animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 /* ===== EXECUTIVE ADMIN DESK THEME ===== */
@@ -469,4 +510,115 @@ h3 { font-size: clamp(1.15rem, 2vw, 1.4rem); letter-spacing: -0.015em; }
 .admin-desk h1, .admin-desk h2, .admin-desk h3, .admin-desk h4 {
   color: #ffffff !important;
 }
+
+/* ===== ADMIN DESK MOBILE NAVIGATION & RESPONSIVE RULES ===== */
+.admin-mobile-tabs-container {
+  display: none;
+}
+.admin-mobile-toggle,
+.admin-mobile-logout {
+  display: none !important;
+}
+
+@media (max-width: 960px) {
+  .admin-mobile-toggle {
+    display: flex !important;
+  }
+  .admin-mobile-logout {
+    display: flex !important;
+  }
+  .desktop-only-text {
+    display: none !important;
+  }
+  .admin-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -100% !important;
+    bottom: 0 !important;
+    width: 285px !important;
+    z-index: 1000 !important;
+    transition: left 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.85) !important;
+  }
+  .admin-sidebar.open {
+    left: 0 !important;
+  }
+  .admin-mobile-tabs-container {
+    display: block !important;
+    background: rgba(10, 14, 24, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: sticky;
+    top: 61px;
+    z-index: 45;
+    padding: 8px 12px;
+  }
+  .admin-mobile-tabs-container::-webkit-scrollbar {
+    display: none;
+  }
+  .admin-mobile-tabs-track {
+    display: flex;
+    gap: 8px;
+    width: max-content;
+  }
+  .admin-mobile-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: #94a3b8;
+    font-size: 0.80rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  .admin-mobile-tab-btn.active {
+    background: rgba(37, 99, 235, 0.22);
+    border-color: rgba(59, 130, 246, 0.45);
+    color: #ffffff;
+    box-shadow: 0 0 14px rgba(37, 99, 235, 0.30);
+  }
+  .admin-mobile-tab-badge {
+    font-size: 0.70rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 9999px;
+    background: #2563eb;
+    color: #ffffff;
+  }
+  .admin-tab-content-pad {
+    padding: 16px 14px !important;
+  }
+  .admin-desk .glass-card {
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+  }
+  .admin-desktop-table-view {
+    display: none !important;
+  }
+  .admin-mobile-leads-list {
+    display: flex !important;
+  }
+  /* Collapse multi-column form grids on mobile */
+  .admin-desk div[style*="gridTemplateColumns: \"1fr 1fr\""],
+  .admin-desk div[style*="gridTemplateColumns: \"1.8fr 1fr\""],
+  .admin-desk div[style*="gridTemplateColumns: \"1.4fr 1fr\""],
+  .admin-desk div[style*="gridTemplateColumns: \"1fr 1fr 1fr\""],
+  .admin-desk div[style*="gridTemplateColumns: '1fr 1fr'"],
+  .admin-desk div[style*="gridTemplateColumns: '1.8fr 1fr'"],
+  .admin-desk div[style*="gridTemplateColumns: '1.4fr 1fr'"],
+  .admin-desk div[style*="gridTemplateColumns: '1fr 1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
 
